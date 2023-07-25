@@ -1,6 +1,7 @@
 import React, { FC } from 'react'
 import { graphql } from 'gatsby'
 import Seo from '../components/Common/Seo'
+import Template from '../components/Common/Template'
 
 type BlogPostProps = {
     data: {
@@ -16,11 +17,11 @@ type BlogPostProps = {
 
 const BlogPost: FC<BlogPostProps> = ({ data, children }) => {
     return (
-        <div>
+        <Template>
             {data.mdx.frontmatter.title}
             <p>{data.mdx.frontmatter.date}</p>
             {children}
-        </div>
+        </Template>
     )
 }
 

@@ -11,11 +11,11 @@ type PostListProps = {
 const PostListWrapper = styled.div`
     width: 768px;
     margin: 0 auto;
-    padding: 50px 0;
+    padding: 30px 0;
 
     @media (max-width: 768px) {
         width: 100%;
-        padding: 50px 20px;
+        padding: 30px 20px;
     }
 `
 

@@ -50,13 +50,14 @@ const Category = styled.div`
 `
 
 const CategoryItem = styled.div`
-  margin: 2.5px 5px;
-  padding: 3px 5px;
-  border-radius: 3px;
-  background: black;
-  font-size: 14px;
-  font-weight: 700;
-  color: white;
+  margin: 2.5px 4px;
+  padding: 3px 8px;
+  border-radius: 16px;
+  border: 1px solid #777;
+  background: #fff;
+  font-size: 12px;
+  font-weight: 400;
+  color: #222;
 `
 
 const Summary = styled.div`

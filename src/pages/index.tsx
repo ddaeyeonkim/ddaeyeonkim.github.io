@@ -1,14 +1,11 @@
 import React, { FC, useMemo } from "react"
 import { graphql } from "gatsby"
-import styled from '@emotion/styled'
-import GlobalStyle from "../components/Common/GlobalStyle"
-import Header from "../components/Main/Header"
-import Footer from "../components/Common/Footer"
 import CategoryList, { CategoryListProps } from "../components/Main/CategoryList"
 import PostList from "../components/Main/PostList"
 import queryString, { ParsedQuery } from "query-string"
 import { PostListItemType } from "../components/Main/PostItem.types"
 import Seo from "../components/Common/Seo"
+import Template from "../components/Common/Template"
 
 type IndexPageProps = {
   location: {
@@ -20,12 +17,6 @@ type IndexPageProps = {
     }
   }
 }
-
-const Container = styled.main`
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
-`
 
 const IndexPage: React.FC<IndexPageProps> = ({
   location: { search },
@@ -62,13 +53,10 @@ const IndexPage: React.FC<IndexPageProps> = ({
   )
 
   return (
-    <Container>
-      <GlobalStyle />
-      <Header />
+    <Template>
       <CategoryList selectedCategory={selectedCategory} categoryList={categoryList} />
       <PostList selectedCategory={selectedCategory} posts={nodes} />
-      <Footer />
-    </Container>
+    </Template>
   )
 }
 

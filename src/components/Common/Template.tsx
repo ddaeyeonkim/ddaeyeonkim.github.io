@@ -14,8 +14,14 @@ const Container = styled.div`
     height: 100%;
 `
 
-const ChildWrapper = styled.div`
+const ContentWrapper = styled.div`
     padding-top: 80px;
+    height: auto;
+    min-height: calc(100vh - 80px);
+`
+
+const FooterWrapper = styled.footer`
+    height: 80px;
 `
 
 const Template: FC<TemplateProps> = function ({ children }) {
@@ -23,8 +29,8 @@ const Template: FC<TemplateProps> = function ({ children }) {
         <Container>
             <GlobalStyle />
             <NavBar />
-            <ChildWrapper>{children}</ChildWrapper>
-            <Footer />
+            <ContentWrapper>{children}</ContentWrapper>
+            <FooterWrapper><Footer /></FooterWrapper>
         </Container>
     )
 }

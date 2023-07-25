@@ -1,7 +1,7 @@
 import React, { FC } from "react";
 import styled from '@emotion/styled';
 
-const FooterWrapper = styled.footer`
+const FooterWrapper = styled.div`
     display: grid;
     place-items: center;
     margin-top: auto;

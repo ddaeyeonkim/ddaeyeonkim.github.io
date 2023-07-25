@@ -1,5 +1,4 @@
-import React, { FC } from 'react'
-import { graphql } from 'gatsby'
+import React, { FC, useMemo } from 'react'
 import styled from '@emotion/styled'
 import PostItem from './PostItem'
 
@@ -14,6 +13,7 @@ export type PostType = {
 }
 
 type PostListProps = {
+    selectedCategory: string
     posts: PostType[]
 }
 
@@ -28,11 +28,22 @@ const PostListWrapper = styled.div`
     }
 `
 
-const PostList: React.FC<PostListProps> = ({
+const PostList: FC<PostListProps> = ({
+    selectedCategory,
     posts,
 }) => {
+    const postListData = useMemo(
+        () => posts.filter(
+            ({ frontmatter: { categories } }) =>
+                selectedCategory !== 'All'
+                    ? categories.includes(selectedCategory)
+                    : true,
+        ),
+        [selectedCategory],
+    )
+
     return <PostListWrapper>
-        {posts.map(
+        {postListData.map(
             ({
                 id, frontmatter,
             }: PostType) => (

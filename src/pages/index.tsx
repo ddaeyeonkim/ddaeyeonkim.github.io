@@ -5,8 +5,10 @@ import GlobalStyle from "../components/Common/GlobalStyle"
 import Header from "../components/Main/Header"
 import Footer from "../components/Common/Footer"
 import CategoryList, { CategoryListProps } from "../components/Main/CategoryList"
-import PostList, { PostType } from "../components/Main/PostList"
+import PostList from "../components/Main/PostList"
 import queryString, { ParsedQuery } from "query-string"
+import { PostListItemType } from "../components/Main/PostItem.types"
+import Seo from "../components/Common/Seo"
 
 type IndexPageProps = {
   location: {
@@ -14,12 +16,12 @@ type IndexPageProps = {
   }
   data: {
     allMdx: {
-      nodes: PostType[]
+      nodes: PostListItemType[]
     }
   }
 }
 
-const Container = styled.div`
+const Container = styled.main`
   display: flex;
   flex-direction: column;
   height: 100vh;
@@ -37,10 +39,10 @@ const IndexPage: React.FC<IndexPageProps> = ({
   const categoryList = useMemo(
     () => nodes.reduce(
       (
-        list: CategoryListProps['categoryList' ], 
+        list: CategoryListProps['categoryList'],
         {
           frontmatter: { categories },
-        }: PostType,
+        }: PostListItemType,
       ) => {
         categories.forEach((category: string) => {
           if (list[category] === undefined) {
@@ -72,19 +74,22 @@ const IndexPage: React.FC<IndexPageProps> = ({
 
 export const query = graphql`
     query {
-        allMdx(sort: {fields: frontmatter___date, order: DESC}) {
+        allMdx(sort: {fields: [frontmatter___date, frontmatter___title], order: DESC}) {
             nodes {
                 id,
                 frontmatter {
-                    date(formatString: "YYYY.MM.DD.")
                     title
                     summary
+                    date(formatString: "YYYY.MM.DD")
                     categories
                     thumbnail
+                    slug
                 }
             }
         }
     }
 `
+
+export const Head = () => <Seo title={'Home page'} />
 
 export default IndexPage

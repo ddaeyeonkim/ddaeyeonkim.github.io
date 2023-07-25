@@ -1,20 +1,11 @@
 import React, { FC, useMemo } from 'react'
 import styled from '@emotion/styled'
 import PostItem from './PostItem'
-
-export type PostType = {
-    id: string
-    frontmatter: {
-        title: string
-        summary: string
-        date: string
-        categories: string[]
-    }
-}
+import { PostListItemType } from './PostItem.types'
 
 type PostListProps = {
     selectedCategory: string
-    posts: PostType[]
+    posts: PostListItemType[]
 }
 
 const PostListWrapper = styled.div`
@@ -45,11 +36,12 @@ const PostList: FC<PostListProps> = ({
     return <PostListWrapper>
         {postListData.map(
             ({
-                id, frontmatter,
-            }: PostType) => (
+                id,
+                frontmatter,
+            }: PostListItemType) => (
                 <PostItem
                     {...frontmatter}
-                    link="https://www.google.co.kr/"
+                    link={`/${frontmatter.slug}`}
                     key={id}
                 />
             )

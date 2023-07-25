@@ -3,6 +3,9 @@ import type { GatsbyConfig } from "gatsby";
 const config: GatsbyConfig = {
   siteMetadata: {
     title: `blog`,
+    description: `dev blog`,
+    image: ``,
+    twitterUsername: ``,
     siteUrl: `https://www.yourdomain.tld`
   },
   // More easily incorporate content into your pages through automatic TypeScript type generation and better GraphQL IntelliSense.
@@ -36,7 +39,7 @@ const config: GatsbyConfig = {
         "name": "reading_contents",
         "path": `${__dirname}/reading_contents/`,
       },
-      __key: "pages"
+      __key: "reading_contents"
     },
     "gatsby-plugin-sharp", 
     {

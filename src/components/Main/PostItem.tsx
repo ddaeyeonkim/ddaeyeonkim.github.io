@@ -1,14 +1,9 @@
 import React, { FC } from 'react'
 import styled from '@emotion/styled'
 import { Link } from 'gatsby'
+import { PostFrontmatterType } from './PostItem.types'
 
-type PostItemProps = {
-    title: string
-    date: string
-    categories: string[]
-    summary: string
-    link: string
-}
+type PostItemProps = PostFrontmatterType & { link: string }
 
 const PostItemWrapper = styled(Link)`
   display: flex;
@@ -21,7 +16,7 @@ const PostItemWrapper = styled(Link)`
   }
 `
 
-const PostItemContent = styled.div`
+const PostItemContent = styled.article`
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -77,7 +72,7 @@ const Summary = styled.div`
   opacity: 0.8;
 `
 
-const PostItem: FC<PostItemProps> = ({ title, date, categories, summary, link }) => {
+const PostItem: FC<PostItemProps> = ({ title, date, categories, summary, slug, link }) => {
     return <PostItemWrapper to={link}>
 
         <PostItemContent>

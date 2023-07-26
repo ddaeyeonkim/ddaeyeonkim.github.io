@@ -78,6 +78,6 @@ export const query = graphql`
     }
 `
 
-export const Head = () => <Seo title={'Home page'} />
+export const Head = () => <Seo title={'김대연 개발 블로그'} />
 
 export default IndexPage

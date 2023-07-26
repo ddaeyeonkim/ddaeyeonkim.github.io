@@ -24,7 +24,7 @@ const NavBar: FC = () => {
     return (
         <NavWrapper>
             <Link to="/">
-                <Title>김대연 기술 블로그</Title>
+                <Title>🖥️ 김대연 개발 블로그</Title>
             </Link>
         </NavWrapper>
     )

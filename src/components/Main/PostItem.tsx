@@ -10,10 +10,6 @@ const PostItemWrapper = styled(Link)`
   flex-direction: column;
   transition: 0.3s box-shadow;
   cursor: pointer;
-
-  &:hover {
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-  }
 `
 
 const PostItemContent = styled.article`
@@ -34,6 +30,13 @@ const Title = styled.div`
   -webkit-box-orient: vertical;
   font-size: 20px;
   font-weight: 700;
+  padding: 10px 0;
+
+  ${PostItemWrapper}:hover & {
+    color: #64766A;
+    text-decoration: underline solid #64766A;
+    text-underline-offset: 8px;
+  }
 `
 
 const Date = styled.div`
@@ -74,19 +77,19 @@ const Summary = styled.div`
 `
 
 const PostItem: FC<PostItemProps> = ({ title, date, categories, summary, slug, link }) => {
-    return <PostItemWrapper to={link}>
+  return <PostItemWrapper to={link}>
 
-        <PostItemContent>
-            <Title>{title}</Title>
-            <Date>{date}</Date>
-            <Category>
-                {categories.map(category => (
-                    <CategoryItem key={category}>{category}</CategoryItem>
-                ))}
-            </Category>
-            <Summary>{summary}</Summary>
-        </PostItemContent>
-    </PostItemWrapper>
+    <PostItemContent>
+      <Title>{title}</Title>
+      <Date>{date}</Date>
+      <Category>
+        {categories.map(category => (
+          <CategoryItem key={category}>{category}</CategoryItem>
+        ))}
+      </Category>
+      <Summary>{summary}</Summary>
+    </PostItemContent>
+  </PostItemWrapper>
 }
 
 export default PostItem

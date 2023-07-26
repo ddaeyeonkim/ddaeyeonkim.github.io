@@ -3,6 +3,7 @@ import { Global, css } from '@emotion/react'
 
 const defaultStyle = css`
     @import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic+Coding:wght@400;700&display=swap');
 
     * {
         padding: 0;

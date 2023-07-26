@@ -1,5 +1,7 @@
-import React, { FC } from 'react'
+import React, { Component, FC } from 'react'
 import styled from '@emotion/styled'
+import { MDXProvider } from '@mdx-js/react'
+import CodeBlock from './CodeBlock'
 
 interface PostContentProps {
     children: React.ReactNode
@@ -84,21 +86,21 @@ const MarkdownRenderer = styled.div`
         text-decoration: underline;
     }
 
-    // Adjust Code Style
-    pre[class*='language-'] {
-        margin: 30px 0;
-        padding: 15px;
-        font-size: 15px;
-
-        ::-webkit-scrollbar-thumb {
-        background: rgba(255, 255, 255, 0.5);
-        border-radius: 3px;
-        }
+    // 코드 블록 스타일
+    pre[class*="language-"] {
+        background-color: #f5f5f5;
+        padding: 1em;
     }
-
-    code[class*='language-'],
-    pre[class*='language-'] {
-        tab-size: 2;
+    pre[class*="language-"] span {
+        font-family: 'Nanum Gothic Coding', monospace;
+    }
+    pre[class*="language-"], code[class*="language-"] {
+        &::selection {
+            background: #ddd;
+        }
+        & ::selection {
+            background: #ddd;
+        }
     }
 
     // Markdown Responsive Design
@@ -133,7 +135,14 @@ const MarkdownRenderer = styled.div`
 const PostContent: FC<PostContentProps> = ({ children }) => {
     return (
         <MarkdownRenderer>
-            {children}
+            <MDXProvider
+                components={{
+                    // TODO: CodeBlock 컴포넌트를 tsx로 작성
+                    pre: CodeBlock as any,
+                }}
+            >
+                {children}
+            </MDXProvider>
         </MarkdownRenderer>
     )
 }

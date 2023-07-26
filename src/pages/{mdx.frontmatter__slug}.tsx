@@ -2,6 +2,8 @@ import React, { FC } from 'react'
 import { graphql } from 'gatsby'
 import Seo from '../components/Common/Seo'
 import Template from '../components/Common/Template'
+import PostHead from '../components/Post/PosstHead'
+import PostContent from '../components/Post/PostContent'
 
 type BlogPostProps = {
     data: {
@@ -9,6 +11,8 @@ type BlogPostProps = {
             frontmatter: {
                 title: string
                 date: string
+                summary: string
+                categories: string[]
             }
         }
     }
@@ -18,9 +22,14 @@ type BlogPostProps = {
 const BlogPost: FC<BlogPostProps> = ({ data, children }) => {
     return (
         <Template>
-            {data.mdx.frontmatter.title}
-            <p>{data.mdx.frontmatter.date}</p>
-            {children}
+            <PostHead
+                title={data.mdx.frontmatter.title}
+                date={data.mdx.frontmatter.date}
+                categories={data.mdx.frontmatter.categories}
+            />
+            <PostContent>
+                {children}
+            </PostContent>
         </Template>
     )
 }
@@ -30,7 +39,9 @@ export const query = graphql`
         mdx(id: { eq: $id }) {
             frontmatter {
                 title
+                summary
                 date(formatString: "YYYY.MM.DD")
+                categories
             }
         }
     }

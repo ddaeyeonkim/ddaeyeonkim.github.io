@@ -95,4 +95,10 @@ body {
 
 ## Item 13. Unit?을 리턴하지 말라
 
-사용하지 말자.
+`Unit?`을 리턴하면 오해를 불러 일으키기 쉽다.  
+기본적으로 `Unit?`을 리턴하거나, 이를 기반으로 연산하지 말자.
+```kotlin
+// showData()의 결과가 null이면, showError()도 호출될 수 있음
+fun showData(): Unit?
+getData()?.let { view.showData() } ?: view.showError()
+```

@@ -37,7 +37,7 @@ const MarkdownRenderer = styled.div`
     * + h1,
     * + h2,
     * + h3 {
-        margin-top: 80px;
+        margin-top: 50px;
     }
 
     hr + h1,
@@ -90,6 +90,12 @@ const MarkdownRenderer = styled.div`
     pre[class*="language-"] {
         background-color: #f5f5f5;
         padding: 1em;
+
+        // 스크롤
+        overflow: scroll;
+        // 줄바꿈
+        /* white-space: pre-wrap; */
+        word-break: break-word;
     }
     pre[class*="language-"] span {
         font-family: 'Nanum Gothic Coding', monospace;

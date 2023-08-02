@@ -1,0 +1,184 @@
+---
+date: '2023-08-02'
+title: '[이펙티브 코틀린] 아이템 14~16 정리'
+categories: ['book', 'kotlin']
+summary: '이펙티브 코틀린 아이템 14 부터 16까지 정리'
+thumbnail: ''
+slug: 'effective-kotlin-items-14-to-16'
+---
+
+## Item 14. 변수 타입이 명확하지 않은 경우 확실하게 지정하라
+
+가독성을 위해 코드를 설계할 때 읽는 사람에게 중요한 정보를 숨겨서는 안 된다.  
+코드 정의로 쉽게 이동할 수 없는 깃허브 같은 환경에서도 읽을 수 있다.  
+```kotlin
+// bad
+val data = getSomeData()
+// good
+val data: UserData = getSomeData()
+```
+
+코틀린은 강력한 타입추론 시스템을 가지고 있어서 많은 경우에 타입 생략이 가능하다.  
+그래서 개발할 때 IDE에서 타입 힌트를 표시하도록 설정해서 사용하고 있었다.  
+하지만 책의 내용대로 타입 힌트를 볼 수 없는 환경에서 읽는 사람도 고려해서 적절히 타입을 명시하는 것이 좋겠다.  
+
+## Item 15. 리시버를 명시적으로 참조하라
+
+스코프 내부에 둘 이상의 리시버가 있는 경우, 리시버를 명시적으로 나타내는 것이 좋다.  
+```kotlin
+class Node(val name: String) {
+    // 자식 노드 생성
+    fun makeChild(childName: String): Node? =
+        create("$name.$childName")  // Node("parent.child")
+            .apply { print("Created ${name}") }  // print("Created parent")
+
+    fun create(name: String): Node? = Node(name)
+}
+
+fun main() {
+    val node = Node("parent")
+    node.makeChild("child")
+}
+
+// 결과
+// Create parent
+```
+`create` 메서드의 리턴타입이 nullable이어서 apply 블록에서 호출한 `name`은 parent의 name을 참조하게 되었다.  
+
+<br/>
+
+의도대로 동작하도록 고친다면 다음과 같다.
+```kotlin
+fun makeChild(childName: String): Node? =
+    create("$name.$childName")  // Node("parent.child")
+        .apply { print("Created ${this?.name}") }  // print("Created parent.child")
+```
+
+<br/>
+
+nullable을 처리할 때는 let이나 also를 사용하는 것이 더 좋다.
+```kotlin
+fun makeChild(childName: String): Node? =
+    create("$name.$childName")  // Node("parent.child")
+        .also { print("Created ${it?.name}") }  // print("Created parent.child")
+```
+
+<br/>
+
+리시버가 명확하지 않다면, 명시적으로 리시버를 지정하자.
+```kotlin
+fun makeChild(childName: String): Node? =
+    create("$name.$childName")  // Node("parent.child")
+        .apply { print("Created ${this?.name} in ${this@Node.name}") } // print("Created parent.child in parent")"
+```
+
+### DSL 마커
+암묵적으로 외부 리시버를 사용하는 것을 막는 `DslMarker` 메타 어노테이션(어노테이션을 위한 어노테이션).
+Dsl 설계에 따라서 사용 여부를 결정하는 것이 좋다.
+```kotlin
+@DslMarker
+annotation class HtmlDsl
+
+fun table(f: TableDsl.() -> Unit) { /* .. */ }
+
+@HtmlDsl
+class TableDsl { /* .. */ }
+
+table {
+  tr {
+    td { +"Column 1" }
+    td { +"Column 2" }
+    tr { /* .. */ } // 컴파일 에러
+    this@table.tr { /* .. */ } // 명시적 리시버 사용
+  }
+}
+```
+
+## Item 16. 프로퍼티는 동작이 아니라 상태를 나타내야 한다
+
+코틀린의 프로퍼티는 사용자 정의 게터, 세터를 가질 수 있다.
+```kotlin
+var name: String? = null
+    get() = field?.toUpperCase()
+    set(value) {
+        if (!value.isNullOrBlank()) {
+            field = value
+        }
+    }
+```
+
+위 코드에서 field는 프로퍼티의 데이터를 저장해두는 백킹 필드(backing field)에 대한 레퍼런스이다.  
+
+<br/>
+
+프로퍼티는 필드가 필요 없다. 오히려 프로퍼티는 개념적으로 접근자를 나타낸다.
+- val의 경우 게터
+- var의 경우 게터와 세터
+따라서 코틀린은 인터페이스에도 프로퍼티를 정의할 수 있다.
+```kotlin
+interface Person {
+    val name: String
+}
+```
+
+<br/>
+
+마찬가지의 이유로 프로퍼티를 위임할 수도 있다.
+```kotlin
+val db = Database by lazy { connectToDb() }
+```
+
+<br/>
+
+프로퍼티는 본질적으로 함수이므로 확장 프로퍼티를 만들 수도 있다.
+```kotlin
+val Context.preferences: SharedPreferences
+    get() = PreferenceManager.getDefaultSharedPreferences(this)
+```
+
+<br/>
+
+프로퍼티를 함수 대신 사용할 수 있지만, 완전히 대체하는 것은 좋지 않다.  
+관습적으로 프로퍼티의 게터에서 무거운 연산 작업을 할 것이라고 예상하지 않기 때문이다.  
+```kotlin
+// bad
+val Tree<Int>.sum: Int
+    get() = when (this) {
+        is Leaf -> value
+        is Node -> left.sum + right.sum
+    }
+```
+
+<br/>
+
+**어떤 것을 프로퍼티로 해야하는지 판단하기 위한 질문**
+> 이 프로퍼티를 함수로 정의할 경우, 접두사로 get 또는 set을 붙일 것인가?  
+> 만약 아니라면, 프로퍼티로 만드는 것은 좋지 않다.
+
+**프로퍼티 대신 함수를 사용하는 것이 좋은 경우**
+- 연산 비용이 높거나, 복잡도가 O(1)보다 큰 경우
+- 비즈니스 로직(애플리케이션의 동작)을 포함하는 경우
+- 결정적이지 않은 경우
+- 변환의 경우
+- 게터에서 프로퍼티의 상태 변경이 일어나야 하는 경우
+
+<br/>
+
+특별한 이유가 없다면 함수를 사용하지 말자.
+```kotlin
+// bad
+class UserIncorrect {
+    private var name: String = ""
+
+    fun getName() = name
+
+    fun setName(name: String) {
+        this.name = name
+    }
+}
+
+// good
+class UserCorrect {
+    var name: String = ""
+}
+```

@@ -109,6 +109,16 @@ const MarkdownRenderer = styled.div`
         }
     }
 
+    p > code {
+        border-radius: 4px;
+        border: 1px solid #ddd;
+        background-color: #f5f5f5;
+        padding: 2px 4px;
+        margin: 0 2px;
+        color: rgb(215, 58, 73);
+        font-family: 'Nanum Gothic Coding', monospace;
+    }
+
     // Markdown Responsive Design
     @media (max-width: 768px) {
         width: 100%;
